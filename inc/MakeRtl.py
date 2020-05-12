@@ -14,7 +14,7 @@ class MakeRtl:
                 self.dirs.append(os.path.join(path, name))
 
 
-s = Rtl()
+s = MakeRtl()
 
 for x in s.dirs:
     print(x)
