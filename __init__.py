@@ -2,14 +2,16 @@ import re
 
 
 class MakeDiff:
-    diff_path = 'css/difference.css';
-    style_path = 'css/style.css.css';
-    rtl_path = 'css/rtl.css.css';
+    diff_path = 'css/difference.css'
+    style_path = 'css/style.css.css'
+    rtl_path = 'css/rtl.css.css'
+    temp = []
 
     def __init__(self):
-        self.clear_difference_file
+        self.clear_difference_file()
 
-    def clear_difference_file(self):
+    @staticmethod
+    def clear_difference_file():
         open('css/difference.css', 'w').close()
 
     def update(self):
@@ -18,15 +20,25 @@ class MakeDiff:
         lines_rtl = rtl.readlines()
         for i, lines_style in enumerate(style):
             if lines_style != lines_rtl[i]:
-                with open("css/difference.css", "a") as result:
-                    result.write(lines_rtl[i])
-                pass
+                self.temp.append(lines_rtl[i])
             else:
-                x = re.findall("^..*;$", lines_rtl[i])
-                if not x:
+                x = re.search("^.*[{},]$", lines_rtl[i])
+                if x:
+                    self.temp.append(lines_rtl[i])
+
+        temp = []
+        for line in self.temp:
+            temp.append(line)
+            if re.search("}", line):
+                if ";" in ''.join(temp):
                     with open("css/difference.css", "a") as result:
-                        result.write(lines_rtl[i])
-        print('difference updated')
+                        for css_property in temp:
+                            result.write(css_property)
+                        result.write("\n")
+
+                temp = []
+
+    print('difference updated')
 
 
 diff = MakeDiff()
