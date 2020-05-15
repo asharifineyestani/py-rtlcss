@@ -2,44 +2,35 @@ import re
 
 
 class MakeDiff:
-    diff_path = 'css/difference.css'
-    style_path = 'css/style.css.css'
-    rtl_path = 'css/rtl.css.css'
-    temp = []
+    from_path = 'css/Footer.js'
+    to_path = 'css/section.blade.php'
 
     def __init__(self):
-        self.clear_difference_file()
+        self.clear_result_file()
 
-    @staticmethod
-    def clear_difference_file():
-        open('css/difference.css', 'w').close()
+    def clear_result_file(self):
+        open(self.to_path, 'w').close()
 
     def update(self):
-        style = open("css/style.css", "r")
-        rtl = open("css/rtl.css", "r")
-        lines_rtl = rtl.readlines()
-        for i, lines_style in enumerate(style):
-            if lines_style != lines_rtl[i]:
-                self.temp.append(lines_rtl[i])
-            else:
-                x = re.search("^.*[{},]$", lines_rtl[i])
-                if x:
-                    self.temp.append(lines_rtl[i])
+        ali = open(self.from_path, "r")
+        s = ''.join(ali.readlines())
+        s = self.obj_to_array(s)
 
-        temp = []
-        for line in self.temp:
-            temp.append(line)
-            if re.search("}", line):
-                if ";" in ''.join(temp):
-                    with open("css/difference.css", "a") as result:
-                        for css_property in temp:
-                            result.write(css_property)
-                        result.write("\n")
+        with open(self.to_path, "a") as result:
+            result.write(s)
+        print('javascript object converted to php array successfully')
 
-                temp = []
-
-    print('difference updated')
+    @staticmethod
+    def obj_to_array(s):
+        s = re.sub(r'let\s*(.*)\s*=', r'$\1=', s)
+        p = r'\s*(.*):\s*(\"*.*?\"*),'
+        to = r'"\1"=>\2,\n'
+        s = re.sub(p, to, s)
+        s = re.sub('\s*{', '\n[\n', s)
+        s = re.sub('\s*}', '\n]', s)
+        return s;
 
 
 diff = MakeDiff()
 diff.update()
+# diff.test()
