@@ -39,8 +39,6 @@ def map_to_loop(string):
     return laravel_foreach_final
 
 
-
-
 def obj_to_array(s):
     s = re.sub(r'let\s*(.*)\s*=', r'$\1=', s)
     p = r'\s*(.*):\s*(\"*.*?\"*),'
@@ -49,3 +47,17 @@ def obj_to_array(s):
     s = re.sub('\s*{', '\n[\n', s)
     s = re.sub('\s*}', '\n]', s)
     return s
+
+
+def heading(string):
+    p = r'<Heading([\s\S]*?)/>'
+
+    def replacement(m):
+        s = '<x-heading @ />'
+        s = re.sub(r'@', m[1], s)
+        return s
+
+    # string = re.findall(p, string)
+    string = re.sub(p, replacement, string)
+    print(string)
+    return ''
