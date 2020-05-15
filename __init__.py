@@ -8,8 +8,8 @@ string = ''.join(from_path.readlines())
 
 # string = obj_to_array(string)
 # string = map_to_loop(string)
-string = heading(string)
-
+# string = heading(string)
+string = maps(string)
 
 with open(to_, "a") as result:
     result.write(string)

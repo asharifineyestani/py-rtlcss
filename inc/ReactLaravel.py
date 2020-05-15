@@ -61,3 +61,16 @@ def heading(string):
     string = re.sub(p, replacement, string)
     print(string)
     return ''
+
+
+def maps(string):
+    p = r'(\{[a-zA-Z]*\.map[.\s\S]*?\)\)})'
+
+    def replacement(m):
+        return map_to_loop(m[0])
+
+    string = re.sub(p, replacement, string)
+
+    print(string)
+
+    return ''
