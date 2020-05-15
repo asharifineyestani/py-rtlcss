@@ -59,8 +59,7 @@ def heading(string):
 
     # string = re.findall(p, string)
     string = re.sub(p, replacement, string)
-    print(string)
-    return ''
+    return string
 
 
 def maps(string):
@@ -71,6 +70,23 @@ def maps(string):
 
     string = re.sub(p, replacement, string)
 
-    print(string)
+    return string
 
-    return ''
+
+def cols(string):
+    p = r'<Col\s+([.\s\S]*?)>'
+
+    def replacement(m):
+        classes = []
+
+        def child_replacement(_m):
+            col_class = 'col-@1-@2'
+            col_class = re.sub(r'@1', _m[1], col_class)
+            col_class = re.sub(r'@2', _m[2], col_class)
+            classes.append(col_class)
+
+        re.sub(r'([a-z]{2})=\{([0-9]*)}', child_replacement, m[1])
+
+        return re.sub(r'@', ' '.join(classes), '<div class="@">')
+
+    return re.sub(p, replacement, string)
