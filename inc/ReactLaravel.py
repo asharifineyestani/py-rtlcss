@@ -90,3 +90,18 @@ def cols(string):
         return re.sub(r'@', ' '.join(classes), '<div class="@">')
 
     return re.sub(p, replacement, string)
+
+
+def other(string):
+    string = re.sub('<Container>', r'<div class="container">', string)
+    string = re.sub('<Row>', r'<div class="row">', string)
+    string = re.sub('</Row>', r'</div>', string)
+    string = re.sub('</Col>', r'</div>', string)
+    string = re.sub('</Container>', r'</div>', string)
+    string = re.sub(r'className="(.*)"', r'class="\1"', string)
+
+    p = r'<Link\sto=\{*\"*(.*?)\"*}*>([\s\S]*?)</Link>'
+    to = r'<a href="\1">\2</a>'
+    string = re.sub(p, to, string)
+
+    return string
